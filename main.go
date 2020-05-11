@@ -3857,6 +3857,10 @@ var words = []string{
 const nwords = 2
 const nextra = 2
 
+var symbols = []string{
+	"#", "@", "-", "_",
+}
+
 func randset() ([]uint64, error) {
 	s := make([]uint64, nwords+nextra)
 	for i := range s {
@@ -3867,7 +3871,7 @@ func randset() ([]uint64, error) {
 		case 2:
 			max = big.NewInt(int64(1000))
 		case 3:
-			max = big.NewInt(int64(2))
+			max = big.NewInt(int64(len(symbols)))
 		}
 		ri, err := rand.Int(rand.Reader, max)
 		if err != nil {
@@ -3899,14 +3903,7 @@ func main() {
 			// ew...
 			continue
 		}
-		randsym := s[idxsym]
-		var sym string
-		switch randsym {
-		case 0:
-			sym = "#"
-		case 1:
-			sym = "@"
-		}
+		sym := symbols[s[idxsym]]
 		pw := selectedWords[0] + strconv.FormatInt(int64(randint), 10) + sym + selectedWords[1]
 		if pwlen := len(pw); pwlen >= minLen && pwlen <= maxLen {
 			passwords = append(passwords, pw)
