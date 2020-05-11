@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/rand"
 	"fmt"
-	"math"
 	"math/big"
 	"strconv"
 )
@@ -3861,8 +3860,15 @@ const nextra = 2
 func randset() ([]uint64, error) {
 	s := make([]uint64, nwords+nextra)
 	for i := range s {
-		max := big.NewInt(int64(0))
-		max.SetUint64(math.MaxUint64)
+		var max *big.Int
+		switch i {
+		case 0, 1:
+			max = big.NewInt(int64(len(words)))
+		case 2:
+			max = big.NewInt(int64(1000))
+		case 3:
+			max = big.NewInt(int64(2))
+		}
 		ri, err := rand.Int(rand.Reader, max)
 		if err != nil {
 			return nil, err
@@ -3878,21 +3884,22 @@ func main() {
 		const minLen = 20
 		const maxLen = 27
 		const nwords = 2
+		const idxint = nwords
+		const idxsym = idxint + 1
 		s, err := randset()
 		if err != nil {
 			panic(err)
 		}
 		selectedWords := [2]string{}
 		for i := range selectedWords {
-			_int := s[i]
-			selectedWords[i] = words[_int%uint64(len(words))]
+			selectedWords[i] = words[s[i]]
 		}
-		randint := s[nwords] % 1000
+		randint := s[idxint]
 		if randint == 666 {
 			// ew...
 			continue
 		}
-		randsym := s[nwords+1] % 2
+		randsym := s[idxsym]
 		var sym string
 		switch randsym {
 		case 0:
