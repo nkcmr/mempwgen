@@ -10,7 +10,7 @@ a password generator that makes secure but memorable passwords.
 ## install
 
 ```
-$ go get -u -v github.com/nkcmr/mempwgen
+$ go install -v code.nkcmr.net/mempwgen@latest
 ```
 
 ## sample
